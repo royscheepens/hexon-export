@@ -1,0 +1,39 @@
+{
+    "name": "royscheepens/hexon-export",
+    "description": "A Laravel 5.5+ package to process imcremental XML exports from Hexon's Doorlinken Voorraad.",
+    "version": "0.1.0",
+    "keywords": [
+        "currenlty open",
+        "laravel"
+    ],
+    "homepage": "https://github.com/royscheepens/hexon-export",
+    "authors": [
+    {
+        "name": "Roy Scheepens",
+        "email": "roy.scheepens@gmail.com"
+    }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "nesbot/carbon": "~1.20"
+    },
+    "require-dev": {
+        "illuminate/framework": "5.5.x"
+    },
+    "autoload": {
+        "psr-4": {
+            "RoyScheepens\\HexonExport\\": "src/"
+        }
+    },
+    "license": "MIT",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "RoyScheepens\\HexonExport\\HexonExportServiceProvider"
+            ],
+            "aliases": {
+                "HexonExport": "RoyScheepens\\HexonExport\\HexonExportFacade"
+            }
+        }
+    }
+}
