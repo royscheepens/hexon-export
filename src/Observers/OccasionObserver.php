@@ -14,7 +14,7 @@ class OccasionObserver
      */
     public function deleting(Occasion $occasion)
     {
-        $occasion->options->delete();
+        $occasion->accessories->delete();
 
         $occasion->images->delete();
     }

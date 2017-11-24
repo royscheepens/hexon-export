@@ -4,7 +4,7 @@ namespace RoyScheepens\HexonExport;
 
 use RoyScheepens\HexonExport\Models\Occasion;
 use RoyScheepens\HexonExport\Models\OccasionImage;
-use RoyScheepens\HexonExport\Models\OccasionOption;
+use RoyScheepens\HexonExport\Models\OccasionAccessory;
 
 use Storage;
 
@@ -49,33 +49,72 @@ class HexonExport {
 
     public function handle(\SimpleXmlElement $xml)
     {
-        // todo: validate XML
+        // The resource id from Hexon
+        $this->resourceId = (int) $xml->voertuignr_hexon;
 
-        $this->resourceId = $xml->voertuignr_hexon;
-
-        $this->resource = Occasion::where('hexon_id', $this->resourceId)->firstOrNew();
-
-
+        // Perform an insert/update or delete, based on the action supplied
         switch ($xml->attributes()->actie)
         {
-            // Creates or updates the existing record
+            // Inserts or updates the existing record
             case 'add':
             case 'change':
 
-                if(empty($xml->fotos))
+                // Check if the resource has any images
+                if(empty($xml->afbeeldingen))
                 {
-                    $this->setError('No images supplied, cannot proceed');
+                    $this->setError('No images supplied, cannot proceed.');
                     return;
                 }
 
-                // $this->storeOptions($xml->opties); // ??
+                // Get the existing resource or create it with the resourceId
+                $this->resource = Occasion::where('hexon_id', $this->resourceId)->firstOrCreate([
+                    'resource_id' => $this->resourceId
+                ]);
 
-                $this->storeImages($xml->fotos);
+                // Set the attributes
+                $this->setAttribute('brand', $xml->merk);
+                $this->setAttribute('model', $xml->model);
+                $this->setAttribute('type', $xml->type);
+                $this->setAttribute('price', $xml->verkoopprijs_particulier, 'int');
+                $this->setAttribute('build_year', $xml->bouwjaar); // todo: int?
+                $this->setAttribute('license_plate', $xml->kenteken);
+                $this->setAttribute('fuel_type', $xml->brandstof);
+                $this->setAttribute('mileage', $xml->tellerstand, 'int');
+                $this->setAttribute('mileage_unit', $xml->tellerstand, 'int');
+                $this->setAttribute('transmission', $xml->transmissie);
+                $this->setAttribute('energy_label', $xml->energie_label);
+
+                $this->setAttribute('sold', (string) $xml->verkocht === 'j', 'boolean');
+                $this->setAttribute('sold_at', $xml->verkocht_datum, 'date');
+
+                // btw marge
+
+                $this->setAccessories($xml->accessoires); // ??
+
+                $this->storeImages($xml->afbeeldingen);
+
+                // Try to save the resource
+                try {
+                    $this->resource->save();
+
+                } catch(\Exception $e) {
+                    // $this->setError($e->getMessage());
+                    $this->setError('Unable to save or update resource.');
+                }
 
                 break;
 
             // Deletes the resource and all associated data
             case 'delete':
+
+                $this->resource = Occasion::where('hexon_id', $this->resourceId)->first();
+
+                if(! $this->resource)
+                {
+                    $this->setError('Error deleting resource. Resource could not be found.');
+                    return;
+                }
+
                 $this->resource->delete();
                 break;
 
@@ -89,24 +128,79 @@ class HexonExport {
     }
 
     /**
+     * Sets an attribute to the resource and casts to desired type
+     * @param string $attr  The attribut key to set
+     * @param mixed  $value The value
+     * @param string $type  To which type to cast
+     */
+    private function setAttribute($attr, $value, $type = 'string', $fallback = null)
+    {
+        switch ($type) {
+            case 'int':
+                $value = (int) $value;
+                break;
+
+            case 'string':
+                $value = (string) $value;
+                break;
+
+            case 'boolean':
+                $value = (bool) $value;
+                break
+
+            case 'date':
+                $value = Carbon::parse($value);
+
+                // todo: test if a valid date
+
+                break;
+        }
+
+        if( empty($value) )
+        {
+            $value = $fallback;
+        }
+
+        $this->resource->setAttribute($attr, $value);
+    }
+
+    private function setAccessories($accessories)
+    {
+        // First, remove all accessories
+        $this->resource->accessoires->delete();
+
+        foreach ($accessories as $accessory)
+        {
+            $this->resource->accessories->create([
+                'name' => $accessory
+            ]);
+        }
+    }
+
+    /**
      * Stores the images to disk
      * @param  Array $images An array of images
      * @return void
      */
     private function storeImages($images)
     {
+        // todo: do we need to delete all images before storing?
+        // this could be very slow
+        $this->resource->images->delete();
+
         foreach ($images as $imageId => $imageUrl)
         {
             if( $contents = file_get_contents($imageUrl) )
             {
-                $imageResource = $this->resource->images->where('resource_id', $imageId)->firstOrNew();
-
-                $imageResource->resource_id = $imageId;
-
-                $imageResource->filename = implode('_', [
+                $filename = implode('_', [
                     $this->resourceId,
                     $imageId
                 ]).'jpg';
+
+                $imageResource = $this->resource->images->create([
+                    'resource_id' => $imageId,
+                    'filename' => $filename
+                ]);
 
                 Storage::disk('public')->put($imageResource->path, $contents);
 

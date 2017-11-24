@@ -20,7 +20,26 @@ class Occasion extends Model
      */
     protected $fillable = [
         // todo: add more
-        'hexon_id'
+        'resource_id',
+    ];
+
+    /**
+     * The attributes that are appended to the model
+     *
+     * @var array
+     */
+    protected $appends = [
+        // 'description',
+        'name'
+    ];
+
+    /**
+     * Which attributes to parse as dates
+     *
+     * @var array
+     */
+    protected $dates = [
+        'sold_at'
     ];
 
     /**
@@ -33,9 +52,22 @@ class Occasion extends Model
         return $this->hasMany('RoyScheepens\HexonExport\Models\OccassionImage');
     }
 
-    public function options()
+    public function accessories()
     {
-        return $this->hasMany('RoyScheepens\HexonExport\Models\OccassionOption');
+        return $this->hasMany('RoyScheepens\HexonExport\Models\OccassionAccessory');
+    }
+
+    /**
+     * Attributes
+     * ----------------------------------------
+     */
+
+    public function getNameAttribute()
+    {
+        return implode(' ', [
+            $this->brand,
+            $this->model
+        ]);
     }
 
     /**

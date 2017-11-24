@@ -4,14 +4,14 @@ namespace RoyScheepens\HexonExport\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class OccasionOption extends Model
+class OccasionAccessory extends Model
 {
     /**
      * The table name
      * todo: make this a config setting
      * @var string
      */
-    protected $table = 'hexon_occasion_options';
+    protected $table = 'hexon_occasion_accessories';
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +19,8 @@ class OccasionOption extends Model
      * @var array
      */
     protected $fillable = [
-        'occasion_id', 'name'
+        'occasion_id',
+        'name'
     ];
 
     /**

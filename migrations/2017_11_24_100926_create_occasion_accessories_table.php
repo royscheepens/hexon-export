@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOccasionOptionsTable extends Migration
+class CreateOccasionAccessoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateOccasionOptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('hexon_occasion_options', function (Blueprint $table) {
+        Schema::create('hexon_occasion_accessories', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('occasion_id')->index();
             $table->string('name');
@@ -31,6 +31,6 @@ class CreateOccasionOptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hexon_occasion_options');
+        Schema::dropIfExists('hexon_occasion_accessories');
     }
 }

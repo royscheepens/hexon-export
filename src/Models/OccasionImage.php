@@ -21,14 +21,19 @@ class OccasionImage extends Model
      * @var array
      */
     protected $fillable = [
-        'occasion_id', 'resource_id', 'filename'
+        'occasion_id',
+        'resource_id',
+        'filename'
     ];
 
     /**
      * The attributes that are appended to the model
      * @var array
      */
-    protected $appends = ['path', 'url'];
+    protected $appends = [
+        'path',
+        'url'
+    ];
 
     /**
      * Relations
