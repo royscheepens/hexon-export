@@ -46,7 +46,7 @@ class HandleExportController extends Controller
 
         if($result->hasErrors())
         {
-            abort(422, $result->getErrors());
+            abort(422, implode('\n', $result->getErrors()));
             exit;
         }
 
