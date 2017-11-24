@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Occasion extends Model
 {
+    /**
+     * The table name
+     * todo: make this a config setting
+     * @var string
+     */
+    protected $table = 'hexon_occasions';
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +31,11 @@ class Occasion extends Model
     public function images()
     {
         return $this->hasMany('RoyScheepens\HexonExport\Models\OccassionImage');
+    }
+
+    public function options()
+    {
+        return $this->hasMany('RoyScheepens\HexonExport\Models\OccassionOption');
     }
 
     /**

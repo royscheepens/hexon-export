@@ -27,4 +27,24 @@ return [
      */
     'url_endpoint' => '/hexon-export',
 
+    /*
+     |--------------------------------------------------------------------------
+     | Images Storage Path
+     |--------------------------------------------------------------------------
+     |
+     | The path where occasion images, relative to your 'public' storage disk.
+     |
+     */
+    'images_storage_path' => 'occasions/images/',
+
+    /*
+     |--------------------------------------------------------------------------
+     | XML Storage Path
+     |--------------------------------------------------------------------------
+     |
+     | The path where incoming XML files are stored, relative to
+     | your 'default' storage disk.
+     |
+     */
+    'xml_storage_path' => 'hexon-export/xml/',
 ];

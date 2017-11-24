@@ -34,7 +34,7 @@ If you want to use the facade, add this to your facades in `config/app.php`
 
 ```
 
-To publish the configuration file, run
+To publish the configuration file and required migrations, run:
 ```
 php artisan vendor:publish --provider="RoyScheepens\HexonExport\HexonExportServiceProvider"
 ```

@@ -22,13 +22,11 @@ class HandleExportController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
-
-        parent::__construct();
     }
 
     /**
-     * Collects the data, converts it into XML and feeds it in the Export
-     * @return String A '1' if all went well, or anything else if not.
+     * Collects the data, converts it into XML and feeds it in the Export class
+     * @return String A '1' if all went well, or a 422 with reasons why if not
      */
     public function handle()
     {
@@ -41,20 +39,18 @@ class HandleExportController extends Controller
 
             // todo: log it
 
-            echo 'Failed to parse XML due to malformed data';
-            exit;
+            abort(422, 'Failed to parse XML due to malformed data.');
         }
 
-        $result = HexonExport::process($xml);
+        $result = HexonExport::processXml($xml);
 
         if($result->getStatus() !== TRUE)
         {
-            echo $result->getErrors();
+            abort(422, $result->getErrors());
             exit;
         }
 
         // Hexon requires a response of '1' if all went well.
-        echo '1';
-        exit;
+        exit('1');
     }
 }
