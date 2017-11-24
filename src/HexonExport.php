@@ -26,6 +26,13 @@ class HexonExport {
     protected $resource;
 
     /**
+     * Maps attributes from the export to model attritbutes
+     * @var Array
+     */
+    protected $occasionAttributeMap = [
+    ];
+
+    /**
      * Class Constructor
      */
     function __construct()
@@ -41,8 +48,6 @@ class HexonExport {
         $this->resourceId = $xml->voertuignr_hexon;
 
         $this->resource = Occasion::where('hexon_id', $this->resourceId)->firstOrNew();
-
-        $this->a
 
         switch ($xml->attributes()->actie)
         {
@@ -107,13 +112,11 @@ class HexonExport {
      */
     private function storeXml($xml)
     {
-        // todo: add hexon id to filename
-        $filename = Carbon::format('Y-m-d H:i:s').'xml';
-        $path = config('hexon-export.xml_storage_path');
+        $filename = implode('_', [
+            Carbon::format('Y-m-dH:i:s'),
+            $this->resourceId
+        ]).'xml';
 
-        Storage::put($path.$filename, $xml);
+        Storage::put(config('hexon-export.xml_storage_path') . $filename, $xml);
     }
-
-    // function handle
-    // function handleImage
 }

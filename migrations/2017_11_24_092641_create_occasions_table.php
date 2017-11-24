@@ -16,6 +16,12 @@ class CreateOccasionsTable extends Migration
         Schema::create('hexon_occasions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('resource_id')->index();
+
+            $table->decimal('price', 10, 2)->unsigned();
+
+            $table->string('brand');
+            $table->string('model');
+
             $table->timestamps();
         });
     }

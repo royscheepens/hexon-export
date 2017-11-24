@@ -4,6 +4,8 @@ namespace RoyScheepens\HexonExport\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Storage;
+
 class OccasionImage extends Model
 {
     /**
@@ -26,7 +28,7 @@ class OccasionImage extends Model
      * The attributes that are appended to the model
      * @var array
      */
-    protected $appends = ['path'];
+    protected $appends = ['path', 'url'];
 
     /**
      * Relations
@@ -45,7 +47,15 @@ class OccasionImage extends Model
 
     public function getPathAttribute()
     {
+        // todo: check this
         return config('hexon-export.images_storage_path') . $this->filename;
     }
 
+    public function getUrlAttribute()
+    {
+        // todo: check this
+        $url = Storage::disk('public')->url(config('hexon-export.images_storage_path') . $this->filename);
+
+        return public_path($url);
+    }
 }

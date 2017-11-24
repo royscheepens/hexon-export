@@ -44,7 +44,7 @@ class HandleExportController extends Controller
 
         $result = HexonExport::processXml($xml);
 
-        if($result->getStatus() !== TRUE)
+        if($result->hasErrors())
         {
             abort(422, $result->getErrors());
             exit;
