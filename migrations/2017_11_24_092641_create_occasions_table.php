@@ -15,28 +15,53 @@ class CreateOccasionsTable extends Migration
     {
         Schema::create('hexon_occasions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('resource_id')->index();
+            $table->unsignedInteger('resource_id')->unique();
+            $table->string('version');
 
             $table->string('brand');
             $table->string('model');
             $table->string('type');
-
-            $table->decimal('price', 10, 2)->unsigned();
-
+            $table->char('build_year', 4)->nullable();
             $table->string('license_plate');
-            $table->string('build_year');
 
-            $table->unsignedInteger('mileage');
-            $table->enum('mileage_unit', ['K', 'M']);
+            $table->string('bodywork');
+            $table->string('color')->nullable();
+            $table->string('base_color')->nullable();
+            $table->string('lacquer')->nullable();
+            $table->string('lacquer_type')->nullable();
+            $table->unsignedInteger('num_doors')->nullable();
+            $table->unsignedInteger('num_seats')->nullable();
 
             $table->enum('fuel_type', ['B', 'D', 'L', '3', 'E', 'H', 'C', 'O'])->nullable();
+            $table->unsignedInteger('mileage')->nullable();
+            $table->enum('mileage_unit', ['K', 'M'])->nullable();
+            $table->unsignedInteger('range')->nullable();
 
             $table->enum('transmission', ['H', 'A', 'S', 'C'])->nullable();
-
+            $table->unsignedInteger('num_gears')->nullable();
+            
+            $table->unsignedInteger('mass')->nullable();
+            $table->unsignedInteger('max_towing_weight')->nullable();
+            $table->unsignedInteger('num_cylinders')->nullable();
+            $table->unsignedInteger('cylinder_capacity')->nullable();
+            
+            $table->unsignedInteger('power')->nullable();
+            $table->enum('power_type', ['kW', 'PK'])->nullable();
+            $table->unsignedInteger('top_speed')->nullable();
+            
+            $table->unsignedInteger('fuel_capacity')->nullable();
+            $table->float('fuel_consumption_avg', 4, 2)->nullable();
+            $table->float('fuel_consumption_city', 4, 2)->nullable();
+            $table->float('fuel_consumption_highway', 4, 2)->nullable();            
             $table->enum('energy_label', ['A', 'B', 'C', 'D', 'E', 'F', 'G'])->nullable();
+            $table->unsignedInteger('co2_emission')->nullable();
 
+            $table->enum('vat_margin', ['B', 'M'])->nullable();
+            $table->unsignedInteger('vehicle_tax')->nullable();
+            $table->unsignedInteger('delivery_costs')->nullable();
+
+            $table->unsignedInteger('price')->nullable();
             $table->boolean('sold')->default(false)->index();
-
             $table->timestamp('sold_at')->nullable();
 
             $table->timestamps();

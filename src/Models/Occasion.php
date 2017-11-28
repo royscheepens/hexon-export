@@ -18,9 +18,8 @@ class Occasion extends Model
      *
      * @var array
      */
-    protected $fillable = [
-        // todo: add more
-        'resource_id',
+    protected $guarded = [
+        'id'
     ];
 
     /**
@@ -41,6 +40,17 @@ class Occasion extends Model
     protected $dates = [
         'sold_at'
     ];
+
+
+    /**
+     * Which attributes to cast
+     *
+     * @var array
+     */
+    protected $casts = [
+        'build_year' => 'int'
+    ];
+
 
     /**
      * Relations
