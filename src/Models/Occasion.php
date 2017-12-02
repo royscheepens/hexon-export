@@ -28,8 +28,9 @@ class Occasion extends Model
      * @var array
      */
     protected $appends = [
+        'name',
+        'price_formatted',
         // 'description',
-        'name'
     ];
 
     /**
@@ -41,7 +42,6 @@ class Occasion extends Model
         'sold_at'
     ];
 
-
     /**
      * Which attributes to cast
      *
@@ -51,6 +51,15 @@ class Occasion extends Model
         'build_year' => 'int'
     ];
 
+    /**
+     * Route Binding
+     * ----------------------------------------
+     */
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     /**
      * Relations
@@ -78,6 +87,58 @@ class Occasion extends Model
             $this->brand,
             $this->model
         ]);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return implode(' ', [
+            $this->brand,
+            $this->model,
+            $this->type
+        ]);
+    }
+
+    public function getPriceFormattedAttribute()
+    {
+        return '€ ' . number_format($this->price, 0, ',', '.') . ',-';
+    }
+
+    public function getMileageFormattedAttribute()
+    {
+        $units = [
+            'K' => 'km',
+            'M' => 'm'
+        ];
+
+        return number_format($this->mileage, 0, ',', '.') . ' ' . $units[$this->mileage_unit];
+    }
+
+    public function getFuelTypeFormattedAttribute()
+    {
+        $types = [
+            'B' => 'Benzine',
+            'D' => 'Diesel',
+            'L' => 'LPG',
+            '3' => '', // todo
+            'E' => 'Elektrisch',
+            'H' => 'Waterstof',
+            'C' => '', // todo
+            'O' => '', // todo
+        ];
+
+        return $types[$this->fuel_type];
+    }
+
+    public function getTransmissionFormattedAttribute()
+    {
+        $types = [
+            'H' => 'Handgeschakeld',
+            'A' => 'Automaat',
+            'S' => 'Sequentieel',
+            'C' => '' // todo
+        ];
+
+        return $types[$this->transmission];
     }
 
     /**

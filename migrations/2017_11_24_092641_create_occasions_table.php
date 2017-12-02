@@ -16,15 +16,25 @@ class CreateOccasionsTable extends Migration
         Schema::create('hexon_occasions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('resource_id')->unique();
+            $table->string('slug')->unique();
             $table->string('version');
 
             $table->string('brand');
             $table->string('model');
-            $table->string('type');
+            $table->string('type')->nullable();
+
+            // todo: check of ook de maand erbij wordt gegeven
             $table->char('build_year', 4)->nullable();
+
+
             $table->string('license_plate');
 
-            $table->string('bodywork');
+            // todo: description
+            // todo: weight
+            // todo: accelleration
+            // todo: apk tot
+
+            $table->string('bodywork')->nullable();
             $table->string('color')->nullable();
             $table->string('base_color')->nullable();
             $table->string('lacquer')->nullable();
@@ -39,20 +49,20 @@ class CreateOccasionsTable extends Migration
 
             $table->enum('transmission', ['H', 'A', 'S', 'C'])->nullable();
             $table->unsignedInteger('num_gears')->nullable();
-            
+
             $table->unsignedInteger('mass')->nullable();
             $table->unsignedInteger('max_towing_weight')->nullable();
             $table->unsignedInteger('num_cylinders')->nullable();
             $table->unsignedInteger('cylinder_capacity')->nullable();
-            
+
             $table->unsignedInteger('power')->nullable();
             $table->enum('power_type', ['kW', 'PK'])->nullable();
             $table->unsignedInteger('top_speed')->nullable();
-            
+
             $table->unsignedInteger('fuel_capacity')->nullable();
             $table->float('fuel_consumption_avg', 4, 2)->nullable();
             $table->float('fuel_consumption_city', 4, 2)->nullable();
-            $table->float('fuel_consumption_highway', 4, 2)->nullable();            
+            $table->float('fuel_consumption_highway', 4, 2)->nullable();
             $table->enum('energy_label', ['A', 'B', 'C', 'D', 'E', 'F', 'G'])->nullable();
             $table->unsignedInteger('co2_emission')->nullable();
 

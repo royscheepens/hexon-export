@@ -20,17 +20,10 @@ class HexonExport {
     protected $resourceId;
 
     /**
-     * The local resource, based on the Hexon Id
+     * The local resource we are going to create or update
      * @var Occasion
      */
     protected $resource;
-
-    /**
-     * Maps attributes from the export to model attributes
-     * @var Array
-     */
-    protected $occasionAttributeMap = [
-    ];
 
     /**
      * Array of errors
@@ -124,7 +117,7 @@ class HexonExport {
                 $this->setAttribute('vehicle_tax', $xml->bpm_bedrag, 'int');
                 $this->setAttribute('delivery_costs', $xml->kosten_rijklaar, 'int');
 
-                // todo: which one to use? 
+                // todo: which one to use?
                 // - verkoopprijs_particulier
                 // - verkoopprijs_handel
                 // - actieprijs
@@ -185,7 +178,7 @@ class HexonExport {
      * @param mixed  $value The value
      * @param string $type  To which type to cast
      */
-    private function setAttribute($attr, $value, $type = 'string', $fallback = null)
+    protected function setAttribute($attr, $value, $type = 'string', $fallback = null)
     {
         switch ($type) {
             case 'int':
@@ -213,6 +206,7 @@ class HexonExport {
                 break;
         }
 
+        // Use the fallback value should it be empty
         if( empty($value) )
         {
             $value = $fallback;
@@ -227,7 +221,7 @@ class HexonExport {
      * @param array $accessories
      * @return void
      */
-    private function setAccessories($accessories)
+    protected function setAccessories($accessories)
     {
         // First, remove all accessories
         $this->resource->accessoires->delete();
@@ -245,10 +239,10 @@ class HexonExport {
      * @param  Array $images An array of images
      * @return void
      */
-    private function storeImages($images)
+    protected function storeImages($images)
     {
-        // todo: do we need to delete all images before storing?
-        // this could be very slow
+        // todo: do we need to delete all images before storing? find out a way to
+        // only update the images that have changed
         // $this->resource->images->delete();
 
         foreach ($images as $imageId => $imageUrl)
@@ -281,7 +275,7 @@ class HexonExport {
      * @param  SimpleXmlElement $xml The XML data to write to disk
      * @return void
      */
-    private function saveXml($xml)
+    protected function saveXml($xml)
     {
         $filename = implode('_', [
             Carbon::format('Y-m-dH:i:s'),
@@ -289,6 +283,15 @@ class HexonExport {
         ]).'xml';
 
         Storage::put(config('hexon-export.xml_storage_path') . $filename, $xml);
+    }
+
+    /**
+     * Set an error
+     * @param string $err The error description
+     */
+    protected function setError($err)
+    {
+        array_push($this->errors, $err);
     }
 
     /**
@@ -314,12 +317,4 @@ class HexonExport {
         return [];
     }
 
-    /**
-     * Set an error
-     * @param string $err The error description
-     */
-    public function setError($err)
-    {
-        array_push($this->errors, $err);
-    }
 }
