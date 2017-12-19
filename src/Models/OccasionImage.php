@@ -63,6 +63,6 @@ class OccasionImage extends Model
         // todo: check this
         $url = Storage::disk('public')->url($this->path);
 
-        return public_path($url);
+        return $url;
     }
 }

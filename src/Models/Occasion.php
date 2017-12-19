@@ -69,6 +69,11 @@ class Occasion extends Model
      * ----------------------------------------
      */
 
+    public function image()
+    {
+        return $this->hasOne('RoyScheepens\HexonExport\Models\OccasionImage')->orderBy('id', 'asc');
+    }
+
     public function images()
     {
         return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionImage');
