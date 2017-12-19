@@ -39,6 +39,7 @@ class Occasion extends Model
      * @var array
      */
     protected $dates = [
+        'apk_until',
         'sold_at'
     ];
 
@@ -48,7 +49,8 @@ class Occasion extends Model
      * @var array
      */
     protected $casts = [
-        'build_year' => 'int'
+        'build_year' => 'int',
+        'sold' => 'boolean'
     ];
 
     /**
@@ -58,6 +60,7 @@ class Occasion extends Model
 
     public function getRouteKeyName()
     {
+        // todo: make configurable
         return 'slug';
     }
 
@@ -68,12 +71,12 @@ class Occasion extends Model
 
     public function images()
     {
-        return $this->hasMany('RoyScheepens\HexonExport\Models\OccassionImage');
+        return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionImage');
     }
 
     public function accessories()
     {
-        return $this->hasMany('RoyScheepens\HexonExport\Models\OccassionAccessory');
+        return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionAccessory');
     }
 
     /**

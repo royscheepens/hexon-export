@@ -42,7 +42,7 @@ class OccasionImage extends Model
 
     public function occasion()
     {
-        return $this->belongsTo('RoyScheepens\HexonExport\Models\Occassion');
+        return $this->belongsTo('RoyScheepens\HexonExport\Models\Occasion');
     }
 
     /**
@@ -52,14 +52,16 @@ class OccasionImage extends Model
 
     public function getPathAttribute()
     {
-        // todo: check this
-        return config('hexon-export.images_storage_path') . $this->filename;
+        return implode('/', [
+            config('hexon-export.images_storage_path') . $this->occasion->resource_id,
+            $this->filename
+        ]);
     }
 
     public function getUrlAttribute()
     {
         // todo: check this
-        $url = Storage::disk('public')->url(config('hexon-export.images_storage_path') . $this->filename);
+        $url = Storage::disk('public')->url($this->path);
 
         return public_path($url);
     }

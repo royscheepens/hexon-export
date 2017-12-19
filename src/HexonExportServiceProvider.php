@@ -38,7 +38,7 @@ class HexonExportServiceProvider extends ServiceProvider
 
         $this->app['router']->group($routeConfig, function($router)
         {
-            $router->get($this->app['config']->get('hexon-export.url_endpoint'), [
+            $router->post($this->app['config']->get('hexon-export.url_endpoint'), [
                 'uses' => 'HandleExportController@handle',
                 'as' => 'hexon-export.export_handler'
             ]);

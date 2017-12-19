@@ -5,6 +5,8 @@ namespace RoyScheepens\HexonExport\Observers;
 use RoyScheepens\HexonExport\Models\Occasion;
 use Illuminate\Support\Collection;
 
+use Storage;
+
 class OccasionObserver
 {
     /**
@@ -32,9 +34,14 @@ class OccasionObserver
      */
     public function deleting(Occasion $occasion)
     {
-        $occasion->accessories->delete();
+        $occasion->accessories()->delete();
 
-        $occasion->images->delete();
+        $occasion->images()->delete();
+
+        // Delete the directory that contains all images of this occasion
+        Storage::disk('public')->deleteDirectory(
+            config('hexon-export.images_storage_path') . $occasion->resource_id
+        );
     }
 
     /**

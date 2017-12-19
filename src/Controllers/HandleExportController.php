@@ -42,7 +42,9 @@ class HandleExportController extends Controller
             abort(422, 'Failed to parse XML due to malformed data.');
         }
 
-        $result = HexonExport::processXml($xml);
+        $export = new HexonExport();
+
+        $result = $export->handle($xml);
 
         if($result->hasErrors())
         {

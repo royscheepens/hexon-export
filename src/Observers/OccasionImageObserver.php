@@ -16,6 +16,7 @@ class OccasionImageObserver
      */
     public function deleting(OccasionImage $image)
     {
+        // todo: this does not seem to work, check it
         if(Storage::disk('public')->exists($image->path))
         {
             Storage::disk('public')->delete($image->path);

@@ -16,18 +16,17 @@ class CreateOccasionsTable extends Migration
         Schema::create('hexon_occasions', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('resource_id')->unique();
-            $table->string('slug')->unique();
-            $table->string('version');
 
             $table->string('brand');
             $table->string('model');
             $table->string('type')->nullable();
+            $table->string('slug')->unique();
 
             // todo: check of ook de maand erbij wordt gegeven
             $table->char('build_year', 4)->nullable();
 
-
             $table->string('license_plate');
+            $table->date('apk_until')->nullable();
 
             // todo: description
             // todo: weight
@@ -55,8 +54,9 @@ class CreateOccasionsTable extends Migration
             $table->unsignedInteger('num_cylinders')->nullable();
             $table->unsignedInteger('cylinder_capacity')->nullable();
 
-            $table->unsignedInteger('power')->nullable();
-            $table->enum('power_type', ['kW', 'PK'])->nullable();
+            $table->unsignedInteger('power_hp')->nullable();
+            $table->unsignedInteger('power_kw')->nullable();
+
             $table->unsignedInteger('top_speed')->nullable();
 
             $table->unsignedInteger('fuel_capacity')->nullable();

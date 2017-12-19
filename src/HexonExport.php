@@ -64,87 +64,89 @@ class HexonExport {
                     return;
                 }
 
-                // Get the existing resource or create it with the resourceId
-                $this->resource = Occasion::where('hexon_id', $this->resourceId)->firstOrCreate([
-                    'resource_id' => $this->resourceId
-                ]);
+                // todo: set version check (2.12)
+                // $xml->attributes()->versie
 
-                // The current version of the resource
-                $this->setAttribute('version', $xml->attributes()->versie);
-
-                // Set all attributes and special properties of the resource
-                $this->setAttribute('brand', $xml->merk);
-                $this->setAttribute('model', $xml->model);
-                $this->setAttribute('type', $xml->type);
-                $this->setAttribute('build_year', $xml->bouwjaar);
-                $this->setAttribute('license_plate', $xml->kenteken);
-
-                $this->setAttribute('bodywork', $xml->carrosserie);
-                $this->setAttribute('color', $xml->kleur);
-                $this->setAttribute('base_color', $xml->basiskleur);
-                $this->setAttribute('lacquer', $xml->laktint);
-                $this->setAttribute('lacquer_type', $xml->laksoort);
-                $this->setAttribute('num_doors', $xml->aantal_deuren, 'int');
-                $this->setAttribute('num_seats', $xml->aantal_zitplaatsen, 'int');
-
-                $this->setAttribute('fuel_type', $xml->brandstof);
-                $this->setAttribute('mileage', $xml->tellerstand, 'int');
-                $this->setAttribute('mileage_unit', $xml->tellerstand_eenheid);
-                $this->setAttribute('range', $xml->actieradius, 'int');
-
-                $this->setAttribute('transmission', $xml->transmissie);
-                $this->setAttribute('num_gears', $xml->aantal_versnellingen, 'int');
-
-                $this->setAttribute('mass', $xml->cilinder_aantal, 'int');
-                $this->setAttribute('max_towing_weight', $xml->max_trekgewicht, 'int');
-                $this->setAttribute('num_cylinders', $xml->cilinder_aantal, 'int');
-                $this->setAttribute('cylinder_capacity', $xml->cilinder_inhoud, 'int');
-
-                $this->setAttribute('power', $xml->vermogen_motor, 'int');
-                // todo: vermogen_motor_kw
-                // todo: vermogen_motor_pk
-                $this->setAttribute('power_type', $xml->vermogensoort);
-                $this->setAttribute('top_speed', $xml->topsnelheid);
-
-                $this->setAttribute('fuel_capacity', $xml->tankinhoud, 'int');
-                $this->setAttribute('fuel_consumption_avg', $xml->gemiddeld_verbruik, 'float');
-                $this->setAttribute('fuel_consumption_city', $xml->verbruik_stad, 'float');
-                $this->setAttribute('fuel_consumption_highway', $xml->verbruik_snelweg, 'float');
-                $this->setAttribute('co2_emission', $xml->co2_uitstoot);
-                $this->setAttribute('energy_label', $xml->energie_label);
-
-                $this->setAttribute('vat_margin', $xml->btw_marge);
-                $this->setAttribute('vehicle_tax', $xml->bpm_bedrag, 'int');
-                $this->setAttribute('delivery_costs', $xml->kosten_rijklaar, 'int');
-
-                // todo: which one to use?
-                // - verkoopprijs_particulier
-                // - verkoopprijs_handel
-                // - actieprijs
-                // - exportprijs
-                // - meeneemprijs
-                $this->setAttribute('price', $xml->verkoopprijs_particulier, 'int');
-
-                $this->setAttribute('sold', (string) $xml->verkocht === 'j', 'boolean');
-                $this->setAttribute('sold_at', $xml->verkocht_datum, 'date');
-
-                // Sets the accessories
-                // todo: how to handle accessory groups?
-                $this->setAccessories($xml->accessoires);
-
-                // Stores all images
-                $this->storeImages($xml->afbeeldingen);
-
-                // Try to save the resource
                 try {
+
+                    // Get the existing resource or create it with the resourceId
+                    $this->resource = Occasion::where('resource_id', $this->resourceId)->firstOrNew([
+                        'resource_id' => $this->resourceId
+                    ]);
+
+                    // Set all attributes and special properties of the resource
+                    $this->setAttribute('brand', $xml->merk);
+                    $this->setAttribute('model', $xml->model);
+                    $this->setAttribute('type', $xml->type);
+                    $this->setAttribute('build_year', $xml->bouwjaar);
+                    $this->setAttribute('license_plate', $xml->kenteken);
+                    $this->setAttribute('apk_until', $xml->apk->attributes()->tot, 'date');
+
+                    $this->setAttribute('bodywork', $xml->carrosserie);
+                    $this->setAttribute('color', $xml->kleur);
+                    $this->setAttribute('base_color', $xml->basiskleur);
+                    $this->setAttribute('lacquer', $xml->laktint);
+                    $this->setAttribute('lacquer_type', $xml->laksoort);
+                    $this->setAttribute('num_doors', $xml->aantal_deuren, 'int');
+                    $this->setAttribute('num_seats', $xml->aantal_zitplaatsen, 'int');
+
+                    $this->setAttribute('fuel_type', $xml->brandstof);
+                    $this->setAttribute('mileage', $xml->tellerstand, 'int');
+                    $this->setAttribute('mileage_unit', $xml->tellerstand->attributes()->eenheid);
+                    $this->setAttribute('range', $xml->actieradius, 'int');
+
+                    $this->setAttribute('transmission', $xml->transmissie);
+                    $this->setAttribute('num_gears', $xml->aantal_versnellingen, 'int');
+
+                    $this->setAttribute('mass', $xml->massa, 'int');
+                    $this->setAttribute('max_towing_weight', $xml->max_trekgewicht, 'int');
+                    $this->setAttribute('num_cylinders', $xml->cilinder_aantal, 'int');
+                    $this->setAttribute('cylinder_capacity', $xml->cilinder_inhoud, 'int');
+
+                    $this->setAttribute('power_hp', $xml->vermogen_motor_pk, 'int');
+                    $this->setAttribute('power_kw', $xml->vermogen_motor_kw, 'int');
+
+                    $this->setAttribute('top_speed', $xml->topsnelheid);
+
+                    $this->setAttribute('fuel_capacity', $xml->tankinhoud, 'int');
+                    $this->setAttribute('fuel_consumption_avg', $xml->gemiddeld_verbruik, 'float');
+                    $this->setAttribute('fuel_consumption_city', $xml->verbruik_stad, 'float');
+                    $this->setAttribute('fuel_consumption_highway', $xml->verbruik_snelweg, 'float');
+                    $this->setAttribute('co2_emission', $xml->co2_uitstoot);
+                    $this->setAttribute('energy_label', $xml->energie_label);
+
+                    $this->setAttribute('vat_margin', $xml->btw_marge);
+                    $this->setAttribute('vehicle_tax', $xml->bpm_bedrag, 'int');
+                    $this->setAttribute('delivery_costs', $xml->kosten_rijklaar, 'int');
+
+                    $this->setAttribute('price', $xml->verkoopprijs_particulier, 'int');
+
+                    $this->setAttribute('sold', (string) $xml->verkocht === 'j', 'boolean');
+                    $this->setAttribute('sold_at', $xml->verkocht_datum, 'date');
+
+                    // wegenbelasting_kwartaal
+                    // opmerkingen
+                    // wielbasis
+                    // laadvermogen
+                    // apk tot
+                    // carrosserie
+
+                    // Save the resource to the database, so we can start
+                    // adding relations
                     $this->resource->save();
 
-                // If saving failed, we delete the newly created resource
-                } catch(\Exception $e) {
-                    $this->resource->delete();
+                    // Sets the accessories
+                    // todo: how to handle accessory groups?
+                    $this->setAccessories($xml->accessoires);
 
-                    // $this->setError($e->getMessage());
+                    // Set the images
+                    $this->setImages($xml->afbeeldingen->afbeelding);
+
+                } catch(\Exception $e) {
+
                     $this->setError('Unable to save or update resource.');
+
+                    $this->setError($e->getMessage());
                 }
 
                 break;
@@ -152,7 +154,7 @@ class HexonExport {
             // Deletes the resource and all associated data
             case 'delete':
 
-                $this->resource = Occasion::where('hexon_id', $this->resourceId)->first();
+                $this->resource = Occasion::where('resource_id', $this->resourceId)->first();
 
                 if(! $this->resource)
                 {
@@ -170,6 +172,8 @@ class HexonExport {
 
         // Store the XML to disk
         $this->saveXml($xml);
+
+        return $this;
     }
 
     /**
@@ -190,13 +194,13 @@ class HexonExport {
                 break;
 
             case 'boolean':
-                $value = (bool) $value;
-                break
+                $value = $value ? true : false;
+                break;
 
             // Try to parse as a Carbon object, if it fails set it to the fallback value
             case 'date':
                 try {
-                    $value = Carbon::parse($value);
+                    $value = Carbon::createFromFormat('d-m-Y', $value);
 
                 } catch(\Exception $e)
                 {
@@ -207,7 +211,7 @@ class HexonExport {
         }
 
         // Use the fallback value should it be empty
-        if( empty($value) )
+        if( $type !== 'boolean' && empty($value) )
         {
             $value = $fallback;
         }
@@ -224,13 +228,16 @@ class HexonExport {
     protected function setAccessories($accessories)
     {
         // First, remove all accessories
-        $this->resource->accessoires->delete();
+        $this->resource->accessories()->delete();
 
         foreach ($accessories as $accessory)
         {
-            $this->resource->accessories->create([
-                'name' => (string) $accessory
-            ]);
+            if(! empty($accessory))
+            {
+                $this->resource->accessories()->create([
+                    'name' => (string) $accessory
+                ]);
+            }
         }
     }
 
@@ -239,22 +246,23 @@ class HexonExport {
      * @param  Array $images An array of images
      * @return void
      */
-    protected function storeImages($images)
+    protected function setImages($images)
     {
-        // todo: do we need to delete all images before storing? find out a way to
-        // only update the images that have changed
-        // $this->resource->images->delete();
+        $this->resource->images()->delete();
 
-        foreach ($images as $imageId => $imageUrl)
+        foreach ($images as $image)
         {
+            $imageId = (int) $image->attributes()->nr;
+            $imageUrl = (string) $image->url;
+
             if( $contents = file_get_contents($imageUrl) )
             {
                 $filename = implode('_', [
                     $this->resourceId,
                     $imageId
-                ]).'jpg';
+                ]).'.jpg';
 
-                $imageResource = $this->resource->images->create([
+                $imageResource = $this->resource->images()->create([
                     'resource_id' => $imageId,
                     'filename' => $filename
                 ]);
@@ -277,12 +285,12 @@ class HexonExport {
      */
     protected function saveXml($xml)
     {
-        $filename = implode('_', [
-            Carbon::format('Y-m-dH:i:s'),
+        $filename = implode(' ', [
+            Carbon::now()->toDateTimeString(),
             $this->resourceId
-        ]).'xml';
+        ]).'.xml';
 
-        Storage::put(config('hexon-export.xml_storage_path') . $filename, $xml);
+        Storage::put(config('hexon-export.xml_storage_path') . $filename, $xml->asXML());
     }
 
     /**
