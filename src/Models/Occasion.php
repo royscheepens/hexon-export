@@ -97,7 +97,7 @@ class Occasion extends Model
         ]);
     }
 
-    public function getFullNameAttribute()
+    public function getNameFullAttribute()
     {
         return implode(' ', [
             $this->brand,
