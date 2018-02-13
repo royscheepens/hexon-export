@@ -22,16 +22,10 @@ class CreateOccasionsTable extends Migration
             $table->string('type')->nullable();
             $table->string('slug')->unique();
 
-            // todo: check of ook de maand erbij wordt gegeven
             $table->char('build_year', 4)->nullable();
 
             $table->string('license_plate');
             $table->date('apk_until')->nullable();
-
-            // todo: description
-            // todo: weight
-            // todo: accelleration
-            // todo: apk tot
 
             $table->string('bodywork')->nullable();
             $table->string('color')->nullable();
@@ -51,6 +45,7 @@ class CreateOccasionsTable extends Migration
 
             $table->unsignedInteger('mass')->nullable();
             $table->unsignedInteger('max_towing_weight')->nullable();
+            $table->unsignedInteger('payload')->nullable();
             $table->unsignedInteger('num_cylinders')->nullable();
             $table->unsignedInteger('cylinder_capacity')->nullable();
 
@@ -66,8 +61,12 @@ class CreateOccasionsTable extends Migration
             $table->enum('energy_label', ['A', 'B', 'C', 'D', 'E', 'F', 'G'])->nullable();
             $table->unsignedInteger('co2_emission')->nullable();
 
+            $table->mediumText('remarks')->nullable();
+
             $table->enum('vat_margin', ['B', 'M'])->nullable();
             $table->unsignedInteger('vehicle_tax')->nullable();
+            $table->unsignedInteger('road_tax_min')->nullable();
+            $table->unsignedInteger('road_tax_max')->nullable();
             $table->unsignedInteger('delivery_costs')->nullable();
 
             $table->unsignedInteger('price')->nullable();

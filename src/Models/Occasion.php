@@ -111,6 +111,11 @@ class Occasion extends Model
         return '€ ' . number_format($this->price, 0, ',', '.') . ',-';
     }
 
+    public function getColorFormattedAttribute()
+    {
+        return ucwords(mb_strtolower($this->color));
+    }
+
     public function getMileageFormattedAttribute()
     {
         $units = [
@@ -119,6 +124,31 @@ class Occasion extends Model
         ];
 
         return number_format($this->mileage, 0, ',', '.') . ' ' . $units[$this->mileage_unit];
+    }
+
+    public function getVatMarginFormattedAttribute()
+    {
+        return $this->vat_margin === 'M' ? 'Marge' : 'BTW';
+    }
+
+    public function getVehicleTaxFormattedAttribute()
+    {
+        return '€ ' . number_format($this->vehicle_tax, 0, ',', '.') . ',-';
+    }
+
+    public function getDeliveryCostsFormattedAttribute()
+    {
+        return '€ ' . number_format($this->delivery_costs, 0, ',', '.') . ',-';
+    }
+
+    public function getRoadTaxMinFormattedAttribute()
+    {
+        return '€ ' . number_format($this->road_tax_min, 0, ',', '.') . ',-';
+    }
+
+    public function getRoadTaxMaxFormattedAttribute()
+    {
+        return '€ ' . number_format($this->road_tax_max, 0, ',', '.') . ',-';
     }
 
     public function getFuelTypeFormattedAttribute()
@@ -161,8 +191,7 @@ class Occasion extends Model
      */
     public function scopeSold($query)
     {
-        // todo: check
-        return $query->where('price', 0);
+        return $query->where('sold', true);
     }
 
     /**
@@ -172,8 +201,7 @@ class Occasion extends Model
      */
     public function scopeNotSold($query)
     {
-        // todo: check
-        return $query->where('price >', 0);
+        return $query->where('sold', false);
     }
 
 }

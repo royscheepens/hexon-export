@@ -100,6 +100,7 @@ class HexonExport {
 
                     $this->setAttribute('mass', $xml->massa, 'int');
                     $this->setAttribute('max_towing_weight', $xml->max_trekgewicht, 'int');
+                    $this->setAttribute('payload', $xml->laadvermogen, 'int');
                     $this->setAttribute('num_cylinders', $xml->cilinder_aantal, 'int');
                     $this->setAttribute('cylinder_capacity', $xml->cilinder_inhoud, 'int');
 
@@ -115,21 +116,19 @@ class HexonExport {
                     $this->setAttribute('co2_emission', $xml->co2_uitstoot);
                     $this->setAttribute('energy_label', $xml->energie_label);
 
+                    $this->setAttribute('remarks', $xml->opmerkingen);
+
                     $this->setAttribute('vat_margin', $xml->btw_marge);
                     $this->setAttribute('vehicle_tax', $xml->bpm_bedrag, 'int');
+                    $this->setAttribute('road_tax_min', $xml->wegenbelasting_kwartaal->attributes()->min, 'int');
+                    $this->setAttribute('road_tax_max', $xml->wegenbelasting_kwartaal->attributes()->max, 'int');
                     $this->setAttribute('delivery_costs', $xml->kosten_rijklaar, 'int');
 
                     $this->setAttribute('price', $xml->verkoopprijs_particulier, 'int');
-
                     $this->setAttribute('sold', (string) $xml->verkocht === 'j', 'boolean');
                     $this->setAttribute('sold_at', $xml->verkocht_datum, 'date');
 
-                    // wegenbelasting_kwartaal
-                    // opmerkingen
                     // wielbasis
-                    // laadvermogen
-                    // apk tot
-                    // carrosserie
 
                     // Save the resource to the database, so we can start
                     // adding relations
