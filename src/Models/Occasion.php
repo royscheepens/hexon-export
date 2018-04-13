@@ -134,8 +134,8 @@ class Occasion extends Model
         {
             $type = is_numeric($char) ? 'number' : 'string';
             $prevChar = substr($formatted, -1);
-
-            if(! $prevChar)
+            
+            if($prevChar == '')
             {
                 $formatted .= $char;
                 continue;
