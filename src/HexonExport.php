@@ -135,8 +135,7 @@ class HexonExport {
                     $this->resource->save();
 
                     // Sets the accessories
-                    // todo: how to handle accessory groups?
-                    $this->setAccessories($xml->accessoires);
+                    $this->setAccessories($xml->accessoires->accessoire);
 
                     // Set the images
                     $this->setImages($xml->afbeeldingen->afbeelding);
@@ -231,12 +230,19 @@ class HexonExport {
 
         foreach ($accessories as $accessory)
         {
-            if(! empty($accessory))
-            {
-                $this->resource->accessories()->create([
-                    'name' => (string) $accessory
-                ]);
+            $name = (string) $accessory->naam;
+
+            if(
+                empty($name) ||
+                strlen($name) <= 1 ||
+                in_array(substr($name, 0, 1), ['(', ')', '&'])
+            ) {
+                continue;
             }
+
+            $this->resource->accessories()->create([
+                'name' => str_limit($name, 160)
+            ]);
         }
     }
 

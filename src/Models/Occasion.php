@@ -81,7 +81,7 @@ class Occasion extends Model
 
     public function accessories()
     {
-        return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionAccessory');
+        return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionAccessory')->orderBy('name');
     }
 
     /**
@@ -106,9 +106,52 @@ class Occasion extends Model
         ]);
     }
 
+    public function getApkUntilFormattedAttribute()
+    {
+        return $this->apk_until->format('d-m-Y');
+    }
+
     public function getPriceFormattedAttribute()
     {
         return '€ ' . number_format($this->price, 0, ',', '.') . ',-';
+    }
+
+    public function getRemarksAttribute($val)
+    {
+        return html_entity_decode($val, ENT_QUOTES | ENT_HTML5);
+    }
+
+    public function getLicensePlateFormattedAttribute()
+    {
+        if(! $this->license_plate)
+        {
+            return null;
+        }
+
+        $formatted = '';
+
+        foreach (str_split($this->license_plate) as $char)
+        {
+            $type = is_numeric($char) ? 'number' : 'string';
+            $prevChar = substr($formatted, -1);
+
+            if(! $prevChar)
+            {
+                $formatted .= $char;
+                continue;
+            }
+
+            $prevCharType = is_numeric($prevChar) ? 'number' : 'string';
+
+            if($type != $prevCharType)
+            {
+                $formatted .= '-';
+            }
+
+            $formatted .= $char;
+        }
+
+        return $formatted;
     }
 
     public function getColorFormattedAttribute()
@@ -177,6 +220,65 @@ class Occasion extends Model
         ];
 
         return $types[$this->transmission];
+    }
+
+    public function getMassFormattedAttribute()
+    {
+        return number_format($this->mass, 0, ',', '.') . 'kg';
+    }
+
+    public function getCylinderCapacityFormattedAttribute()
+    {
+        return $this->cylinder_capacity . ' cc';
+    }
+
+    public function getPowerAttribute()
+    {
+        if($this->power_hp && $this->power_kw) {
+            return sprintf("%d pk / %d Kw", $this->power_hp, $this->power_kw);
+        }
+
+        if($this->power_hp) {
+            return sprintf("%d pk", $this->power_hp);
+        }
+
+        if($this->power_kw) {
+            return sprintf("%d Kw", $this->power_kw);
+        }
+
+        return null;
+    }
+
+    public function getCo2EmissionFormattedAttribute()
+    {
+        return $this->co2_emission . ' g/Km';
+    }
+
+    public function getFuelConsumptionCityFormattedAttribute()
+    {
+        return $this->fuel_consumption_city . ' l/100 Km';
+    }
+    
+    public function getFuelConsumptionHighwayFormattedAttribute()
+    {
+        return $this->fuel_consumption_highway . ' l/100 Km';
+    }
+
+    public function getFuelConsumptionAvgFormattedAttribute()
+    {
+        return $this->fuel_consumption_avg . ' l/100 Km';
+    }
+
+    public function getRoadTaxAttribute()
+    {
+        if($this->road_tax_min && $this->road_tax_max) {
+            return sprintf("€ %s - € %s p/kw", 
+                number_format($this->road_tax_min, 0, ',', '.'), 
+                number_format($this->road_tax_max, 0, ',', '.')
+            );
+        }
+
+        return null;
     }
 
     /**
