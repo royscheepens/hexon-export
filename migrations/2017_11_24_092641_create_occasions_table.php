@@ -22,7 +22,7 @@ class CreateOccasionsTable extends Migration
             $table->string('type')->nullable();
             $table->string('slug')->unique();
 
-            $table->char('build_year', 4)->nullable();
+            $table->char('build_year', 7)->nullable();
 
             $table->string('license_plate');
             $table->date('apk_until')->nullable();

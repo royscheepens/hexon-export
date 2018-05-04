@@ -78,7 +78,6 @@ class HexonExport {
                     $this->setAttribute('brand', $xml->merk);
                     $this->setAttribute('model', $xml->model);
                     $this->setAttribute('type', $xml->type);
-                    $this->setAttribute('build_year', $xml->bouwjaar);
                     $this->setAttribute('license_plate', $xml->kenteken);
                     $this->setAttribute('apk_until', $xml->apk->attributes()->tot, 'date');
 
@@ -128,7 +127,8 @@ class HexonExport {
                     $this->setAttribute('sold', (string) $xml->verkocht === 'j', 'boolean');
                     $this->setAttribute('sold_at', $xml->verkocht_datum, 'date');
 
-                    // wielbasis
+                    // Sets the build year
+                    $this->setBuildYear($xml->datum_deel_1);
 
                     // Save the resource to the database, so we can start
                     // adding relations
@@ -215,6 +215,20 @@ class HexonExport {
         }
 
         $this->resource->setAttribute($attr, $value);
+    }
+
+    /**
+     * Sets the build_year attribute based on the datum_deel_1 value
+     *
+     * @param string $registrationDate
+     * @return void
+     */
+    private function setBuildYear($registrationDate) 
+    {
+        if($date = Carbon::createFromFormat('d-m-Y', $registrationDate))
+        {
+            $this->resource->setAttribute('build_year', $date->format('m-Y'));
+        }
     }
 
     /**

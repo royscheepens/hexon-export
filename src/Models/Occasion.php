@@ -49,7 +49,6 @@ class Occasion extends Model
      * @var array
      */
     protected $casts = [
-        'build_year' => 'int',
         'sold' => 'boolean'
     ];
 
