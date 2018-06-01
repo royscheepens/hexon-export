@@ -61,7 +61,7 @@ class HexonExport {
                 if(empty($xml->afbeeldingen))
                 {
                     $this->setError('No images supplied, cannot proceed.');
-                    return;
+                    return $this;
                 }
 
                 // todo: set version check (2.12)
@@ -157,7 +157,7 @@ class HexonExport {
                 if(! $this->resource)
                 {
                     $this->setError('Error deleting resource. Resource could not be found.');
-                    return;
+                    return $this;
                 }
 
                 $this->resource->delete();
