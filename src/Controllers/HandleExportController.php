@@ -4,6 +4,7 @@ namespace RoyScheepens\HexonExport\Controllers;
 
 use RoyScheepens\HexonExport\HexonExport;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
@@ -37,9 +38,11 @@ class HandleExportController extends Controller
 
         } catch(\Exception $e) {
 
-            // todo: log it
+            $error = 'Failed to parse XML due to malformed data.';
 
-            abort(422, 'Failed to parse XML due to malformed data.');
+            Log::error($error);
+
+            abort(422, error);
         }
 
         $export = new HexonExport();
@@ -48,7 +51,11 @@ class HandleExportController extends Controller
 
         if($result->hasErrors())
         {
-            abort(422, implode('\n', $result->getErrors()));
+            $error = implode('\n', $result->getErrors());
+
+            Log::error($error);
+
+            abort(422, $error);
             exit;
         }
 

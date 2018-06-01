@@ -47,6 +47,9 @@ class HexonExport {
      */
     public function handle(\SimpleXmlElement $xml)
     {
+        // Store the XML to disk before processing
+        $this->saveXml($xml);
+
         // The resource id from Hexon
         $this->resourceId = (int) $xml->voertuignr_hexon;
 
@@ -154,22 +157,17 @@ class HexonExport {
 
                 $this->resource = Occasion::where('resource_id', $this->resourceId)->first();
 
-                if(! $this->resource)
+                if($this->resource)
                 {
-                    $this->setError('Error deleting resource. Resource could not be found.');
-                    return $this;
+                    $this->resource->delete();
                 }
 
-                $this->resource->delete();
                 break;
 
             // Nothing to do here...
             default:
                 break;
         }
-
-        // Store the XML to disk
-        $this->saveXml($xml);
 
         return $this;
     }
@@ -223,7 +221,7 @@ class HexonExport {
      * @param string $registrationDate
      * @return void
      */
-    private function setBuildYear($registrationDate) 
+    private function setBuildYear($registrationDate)
     {
         if($date = Carbon::createFromFormat('d-m-Y', $registrationDate))
         {
