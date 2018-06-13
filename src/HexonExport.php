@@ -47,11 +47,11 @@ class HexonExport {
      */
     public function handle(\SimpleXmlElement $xml)
     {
-        // Store the XML to disk before processing
-        $this->saveXml($xml);
-
         // The resource id from Hexon
         $this->resourceId = (int) $xml->voertuignr_hexon;
+
+        // Store the XML to disk before processing
+        $this->saveXml($xml);
 
         // Perform an insert/update or delete, based on the action supplied
         switch ($xml->attributes()->actie)
@@ -127,6 +127,9 @@ class HexonExport {
                     $this->setAttribute('delivery_costs', $xml->kosten_rijklaar, 'int');
 
                     $this->setAttribute('price', $xml->verkoopprijs_particulier, 'int');
+
+                    $isSold = (string) $xml->verkocht === 'j' || (int) $xml->verkoopprijs_particulier < 10;
+
                     $this->setAttribute('sold', (string) $xml->verkocht === 'j', 'boolean');
                     $this->setAttribute('sold_at', $xml->verkocht_datum, 'date');
 
