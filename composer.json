@@ -1,16 +1,16 @@
 {
-    "name": "royscheepens/hexon-export",
-    "description": "A Laravel 5.5+ package to process imcremental XML exports from Hexon's Doorlinken Voorraad.",
+    "name": "pietkoorn/hexon-export",
+    "description": "A Laravel 5.5+ package to process imcremental XML exports from Hexon's Doorlinken Voorraad. Fork by Piet Koorn",
     "version": "0.1.1",
     "keywords": [
         "currenlty open",
         "laravel"
     ],
-    "homepage": "https://github.com/royscheepens/hexon-export",
+    "homepage": "https://github.com/pietkoorn/hexon-export",
     "authors": [
     {
-        "name": "Roy Scheepens",
-        "email": "roy.scheepens@gmail.com"
+        "name": "Piet Koorn",
+        "email": "piet@goforit.nl"
     }
     ],
     "require": {
