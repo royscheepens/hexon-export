@@ -2,6 +2,7 @@
 
 namespace RoyScheepens\HexonExport;
 
+
 use RoyScheepens\HexonExport\Models\Occasion;
 use RoyScheepens\HexonExport\Models\OccasionImage;
 use RoyScheepens\HexonExport\Models\OccasionAccessory;
