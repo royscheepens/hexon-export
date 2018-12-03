@@ -83,6 +83,11 @@ class Occasion extends Model
         return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionAccessory')->orderBy('name');
     }
 
+    public function accessorygroups()
+    {
+        return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionAccessoryGroup')->orderBy('groupname')->orderBy('name');
+    }
+
     /**
      * Attributes
      * ----------------------------------------

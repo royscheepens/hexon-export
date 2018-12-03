@@ -2,7 +2,6 @@
 
 namespace RoyScheepens\HexonExport;
 
-
 use RoyScheepens\HexonExport\Models\Occasion;
 use RoyScheepens\HexonExport\Models\OccasionImage;
 use RoyScheepens\HexonExport\Models\OccasionAccessory;
@@ -144,6 +143,9 @@ class HexonExport {
                     // Sets the accessories
                     $this->setAccessories($xml->accessoires->accessoire);
 
+                    // Sets the accessorygroups
+                    $this->setAccessorygroups($xml->accessoiregroepen);
+
                     // Set the images
                     $this->setImages($xml->afbeeldingen->afbeelding);
 
@@ -257,6 +259,36 @@ class HexonExport {
             }
 
             $this->resource->accessories()->create([
+                'name' => str_limit($name, 160)
+            ]);
+        }
+    }
+
+    /**
+     * Sets the accessorygroups
+     *
+     * @param array $accessorygroups
+     * @return void
+     */
+    protected function setAccessorygroups($accessorygroups)
+    {
+        // First, remove all accessorygroups
+        $this->resource->accessorygroups()->delete();
+
+        foreach ($accessorygroups->accessoiregroep->accessoire as $accessorygroup)
+        {
+            $name = (string) $accessorygroup;
+
+            if(
+                empty($name) ||
+                strlen($name) <= 1 ||
+                in_array(substr($name, 0, 1), ['(', ')', '&'])
+            ) {
+                continue;
+            }
+
+            $this->resource->accessorygroups()->create([
+                'groupname' => $accessorygroups->accessoiregroep['naam'],
                 'name' => str_limit($name, 160)
             ]);
         }
