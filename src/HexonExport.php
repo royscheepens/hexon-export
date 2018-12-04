@@ -275,22 +275,23 @@ class HexonExport {
         // First, remove all accessorygroups
         $this->resource->accessorygroups()->delete();
 
-        foreach ($accessorygroups->accessoiregroep->accessoire as $accessorygroup)
-        {
-            $name = (string) $accessorygroup;
+        foreach($accessorygroups->accessoiregroep as $group) {
+            foreach ($group->accessoire as $accessorygroup) {
+                $name = (string) $accessorygroup;
 
-            if(
-                empty($name) ||
-                strlen($name) <= 1 ||
-                in_array(substr($name, 0, 1), ['(', ')', '&'])
-            ) {
-                continue;
+                if(
+                    empty($name) ||
+                    strlen($name) <= 1 ||
+                    in_array(substr($name, 0, 1), ['(', ')', '&'])
+                ) {
+                    continue;
+                }
+
+                $this->resource->accessorygroups()->create([
+                    'groupname' => $group['naam'],
+                    'name' => str_limit($name, 160)
+                ]);
             }
-
-            $this->resource->accessorygroups()->create([
-                'groupname' => $accessorygroups->accessoiregroep['naam'],
-                'name' => str_limit($name, 160)
-            ]);
         }
     }
 
