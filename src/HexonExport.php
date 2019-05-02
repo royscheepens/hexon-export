@@ -126,6 +126,11 @@ class HexonExport {
                     $this->setAttribute('road_tax_max', $xml->wegenbelasting_kwartaal->attributes()->max, 'int');
                     $this->setAttribute('delivery_costs', $xml->kosten_rijklaar, 'int');
 
+                    $this->setAttribute('length', $xml->lengte, 'int');
+                    $this->setAttribute('width', $xml->breedte, 'int');
+                    $this->setAttribute('height', $xml->hoogte, 'int');
+                    $this->setAttribute('wheel_base', $xml->wielbasis, 'int');
+
                     $this->setAttribute('price', $xml->verkoopprijs_particulier, 'int');
 
                     $isSold = (string) $xml->verkocht === 'j' || (int) $xml->verkoopprijs_particulier < 10;
