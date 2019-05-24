@@ -130,6 +130,7 @@ class HexonExport {
                     $this->setAttribute('width', $xml->breedte, 'int');
                     $this->setAttribute('height', $xml->hoogte, 'int');
                     $this->setAttribute('wheel_base', $xml->wielbasis, 'int');
+                    $this->setAttribute('nap_weblabel', $xml->model);
 
                     $this->setAttribute('price', $xml->verkoopprijs_particulier, 'int');
 
