@@ -18,7 +18,7 @@ class OccasionObserver
     {
         if(! $occasion->slug)
         {
-            $slug = str_slug($occasion->name_full);
+            $slug = Str::slug($occasion->name_full);
 
             $slug = $this->makeSlugUnique($occasion, $slug);
 

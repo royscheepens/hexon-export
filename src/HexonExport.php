@@ -266,7 +266,7 @@ class HexonExport {
             }
 
             $this->resource->accessories()->create([
-                'name' => str_limit($name, 160)
+                'name' => Str::limit($name, 160)
             ]);
         }
     }
@@ -296,7 +296,7 @@ class HexonExport {
 
                 $this->resource->accessorygroups()->create([
                     'groupname' => $group['naam'],
-                    'name' => str_limit($name, 160)
+                    'name' => Str::limit($name, 160)
                 ]);
             }
         }
