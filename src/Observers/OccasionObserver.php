@@ -4,6 +4,7 @@ namespace RoyScheepens\HexonExport\Observers;
 
 use RoyScheepens\HexonExport\Models\Occasion;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 use Storage;
 
