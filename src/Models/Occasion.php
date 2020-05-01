@@ -78,6 +78,16 @@ class Occasion extends Model
         return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionImage');
     }
 
+    public function video()
+    {
+        return $this->hasOne('RoyScheepens\HexonExport\Models\OccasionVideo')->orderBy('id', 'asc');
+    }
+
+    public function videos()
+    {
+        return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionVideo');
+    }
+
     public function accessories()
     {
         return $this->hasMany('RoyScheepens\HexonExport\Models\OccasionAccessory')->orderBy('name');

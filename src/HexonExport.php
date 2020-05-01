@@ -156,6 +156,9 @@ class HexonExport {
                     // Set the images
                     $this->setImages($xml->afbeeldingen->afbeelding);
 
+                    // Set the videos
+                    $this->setVideos($xml->videos);                    
+
                 } catch(\Exception $e) {
 
                     $this->setError('Unable to save or update resource.');
@@ -335,6 +338,31 @@ class HexonExport {
 
             } else {
                 // todo: handle exception?
+            }
+        }
+    }
+
+    /**
+     * Sets the videos
+     * @param  Array $videos An array of videos
+     * @return void
+     */
+    protected function setVideos($videos)
+    {
+        // First, remove all videos
+        $this->resource->videos()->delete();
+
+        if(!empty($videos->video)) {
+            foreach($videos->video as $video) {
+                $videoId = (int) $video->attributes()->nr;
+                $videoSource = (string) $video->bron;
+                $videoCode = (string) $video->videocode;
+
+                $this->resource->videos()->create([
+                    'resource_id' => $videoId,
+                    'source' => $videoSource,
+                    'code' => $videoCode
+                ]);
             }
         }
     }

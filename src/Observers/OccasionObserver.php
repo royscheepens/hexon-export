@@ -37,6 +37,7 @@ class OccasionObserver
     {
         $occasion->accessories()->delete();
         $occasion->accessorygroups()->delete();
+        $occasion->videos()->delete();
 
         $occasion->images()->delete();
 

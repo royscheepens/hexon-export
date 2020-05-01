@@ -42,7 +42,7 @@ class HandleExportController extends Controller
 
             Log::error($error);
 
-            abort(422, error);
+            abort(422, $error);
         }
 
         $export = new HexonExport();
