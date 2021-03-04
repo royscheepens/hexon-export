@@ -1,4 +1,4 @@
-# Currently Open
+# Hexon Export
 
 [![Total Downloads](https://poser.pugx.org/royscheepens/hexon-export/downloads)](https://packagist.org/packages/royscheepens/hexon-export)
 [![License](https://poser.pugx.org/royscheepens/hexon-export/license)](https://packagist.org/packages/royscheepens/hexon-export)
