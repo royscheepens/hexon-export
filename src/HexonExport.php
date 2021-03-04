@@ -112,9 +112,9 @@ class HexonExport {
                     $this->setAttribute('top_speed', $xml->topsnelheid);
 
                     $this->setAttribute('fuel_capacity', $xml->tankinhoud, 'int');
-                    $this->setAttribute('fuel_consumption_avg', $xml->gemiddeld_verbruik, 'float');
-                    $this->setAttribute('fuel_consumption_city', $xml->verbruik_stad, 'float');
-                    $this->setAttribute('fuel_consumption_highway', $xml->verbruik_snelweg, 'float');
+                    $this->setAttribute('fuel_consumption_avg', $xml->gemiddeld_verbruik || null, 'float');
+                    $this->setAttribute('fuel_consumption_city', $xml->verbruik_stad || null, 'float');
+                    $this->setAttribute('fuel_consumption_highway', $xml->verbruik_snelweg || null, 'float');
                     $this->setAttribute('co2_emission', $xml->co2_uitstoot);
                     $this->setAttribute('energy_label', $xml->energie_label);
 

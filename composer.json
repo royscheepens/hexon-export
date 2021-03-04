@@ -1,7 +1,7 @@
 {
     "name": "royscheepens/hexon-export",
     "description": "A Laravel 5.5+ package to process imcremental XML exports from Hexon's Doorlinken Voorraad.",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "keywords": [
         "currenlty open",
         "laravel"
