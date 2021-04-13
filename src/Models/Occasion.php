@@ -133,7 +133,7 @@ class Occasion extends Model
         {
             $type = is_numeric($char) ? 'number' : 'string';
             $prevChar = substr($formatted, -1);
-            
+
             if($prevChar == '')
             {
                 $formatted .= $char;
@@ -203,7 +203,7 @@ class Occasion extends Model
             'E' => 'Elektrisch',
             'H' => 'Waterstof',
             'C' => '', // todo
-            'O' => '', // todo
+            'O' => 'Overig',
         ];
 
         return $types[$this->fuel_type];
@@ -257,7 +257,7 @@ class Occasion extends Model
     {
         return $this->fuel_consumption_city . ' l/100 Km';
     }
-    
+
     public function getFuelConsumptionHighwayFormattedAttribute()
     {
         return $this->fuel_consumption_highway . ' l/100 Km';
@@ -271,8 +271,8 @@ class Occasion extends Model
     public function getRoadTaxAttribute()
     {
         if($this->road_tax_min && $this->road_tax_max) {
-            return sprintf("€ %s - € %s p/kw", 
-                number_format($this->road_tax_min, 0, ',', '.'), 
+            return sprintf("€ %s - € %s p/kw",
+                number_format($this->road_tax_min, 0, ',', '.'),
                 number_format($this->road_tax_max, 0, ',', '.')
             );
         }
